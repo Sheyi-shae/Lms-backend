@@ -19,12 +19,23 @@ const prisma = new PrismaClient();
 
 const app = express();
 // Middleware
-app.use(
-  cors({
-    origin: 'http://localhost:3000',
-    credentials: true, // Allow cookies to be sent
-  })
-);
+const allowedOrigins = [
+  'http://localhost:3000',               // dev frontend
+  'https://your-production-frontend.com' // prod frontend domain
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true); // allow REST clients like Postman or same-origin requests
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `CORS policy does not allow access from origin ${origin}`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+}));
+
 app.use(express.json()); //parse json request body
 app.use(express.urlencoded({ extended: false }));
  app.use(cookieParser());

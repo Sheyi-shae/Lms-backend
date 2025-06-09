@@ -76,12 +76,12 @@ export async function signinController(req,res,next) {
             expiresIn: process.env.JWT_EXPIRES_IN,
         });
          // Set token in httpOnly cookie
-         res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Only true in production
-            sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax', // Prevent issues in dev mode
-            maxAge: 7 * 24 * 60 * 60 * 1000, 
-          });
+       res.cookie('token', token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production', // true in prod (HTTPS only)
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
           
         return res.status(201).json({
             success: true,
