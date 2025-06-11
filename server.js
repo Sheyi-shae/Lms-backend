@@ -19,7 +19,7 @@ const prisma = new PrismaClient();
 
 const app = express();
 // Middleware
-import cors from 'cors';
+
 
 const allowedOrigins = ['http://localhost:3000'];
 
