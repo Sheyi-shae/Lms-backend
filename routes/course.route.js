@@ -14,7 +14,7 @@ courseRouter.post('/', authenticateUser, authorizeRole('instructor', 'admin'),
     verifiedUser, courseController);
 courseRouter.get('/all-courses', authenticateUser, getAllCourse);
 //get all courses for non authenticated users
-courseRouter.get('/all-courses/public', getAllCourse); //  fetch all courses for public users
+
 courseRouter.get('/:id', authenticateUser, getCourseByID)//also fetch course details attached to the logged in instructor
 courseRouter.put('/update/:courseId', authenticateUser,verifiedUser, authorizeRole('instructor', 'admin'),
     verifiedUser, updateCourse); //  update course
@@ -25,6 +25,10 @@ courseRouter.delete('/:courseId', authenticateUser,verifiedUser, authorizeRole('
 courseRouter.get('/mycourse/:instructorId', authenticateUser,verifiedUser, authorizeRole('instructor', 'admin'),
     verifiedUser, getCourseByUserId);
 
+    //for public users
+    courseRouter.get('/all-courses/public', getAllCourse); //  fetch all courses for public users
+courseRouter.get('/public/:id',  getCourseByID)
+courseRouter.get('/lesson/public/:lessonId', getLessonById)
 
 //lesson for courses
 courseRouter.post('/lesson/:courseId', authenticateUser,

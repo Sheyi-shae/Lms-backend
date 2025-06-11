@@ -125,7 +125,13 @@ export async function verifyUserController(req,res,next) {
 
 
 export const logoutUser = (req, res) => {
-    res.clearCookie('token');
-    res.status(200).json({ message: "Logged out successfully" });
-  };
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  });
+
+  return res.status(200).json({ message: 'Logged out successfully' });
+};
+
   
