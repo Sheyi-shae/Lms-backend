@@ -21,7 +21,7 @@ const app = express();
 // Middleware
 
 
-const allowedOrigins = ['http://localhost:3000'];
+const allowedOrigins = ['http://localhost:3000','https://lms-frontend-six-tau.vercel.app'];
 
 app.use(
   cors({
