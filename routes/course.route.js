@@ -6,14 +6,12 @@ import { completeLesson, createLesson, deleteLessonById, getCourseLessonsById, g
 
 const courseRouter = Router();
 
-//check if user is looged in
-//check if the logged in user is an instructor
-//check if the logged in user is verified
-//if all the above is true, create a course
+
 courseRouter.post('/', authenticateUser, authorizeRole('instructor', 'admin'),
     verifiedUser, courseController);
 courseRouter.get('/all-courses', authenticateUser, getAllCourse);
 //get all courses for non authenticated users
+
 
 courseRouter.get('/:id', authenticateUser, getCourseByID)//also fetch course details attached to the logged in instructor
 courseRouter.put('/update/:courseId', authenticateUser,verifiedUser, authorizeRole('instructor', 'admin'),

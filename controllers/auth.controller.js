@@ -39,8 +39,7 @@ export default async function authController(req,res,next) {
             data: newUser
         });
     } catch (error) {
-        // console.error('Error creating user:', error);
-        // return res.status(500).json({ error: 'Internal server error' });
+       
         next(error)
     }
 }
@@ -125,6 +124,7 @@ export async function verifyUserController(req,res,next) {
 
 
 export const logoutUser = (req, res) => {
+    console.log('Logging out user');
   res.clearCookie('token', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',

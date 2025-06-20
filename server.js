@@ -19,7 +19,7 @@ const prisma = new PrismaClient();
 
 const app = express();
 // Middleware
-import cors from 'cors';
+
 
 const allowedOrigins = ['http://localhost:3000'];
 
@@ -32,7 +32,7 @@ app.use(
         callback(new Error('Not allowed by CORS'));
       }
     },
-    credentials: true, // This is required for sending cookies
+    credentials: true, 
   })
 );
 
@@ -50,22 +50,19 @@ app.use('/api/upload',uploadRouter);
 app.use('/api/certificate',certificateRouter) 
 app.use('/api/category',categoryRouter);
 
-app.get('/', (req, res) => {
-  res.json('Welcome to the backend server!');
-})
+
 
 
 //db connect check 
 async function checkDB() {
     try {
       await prisma.$connect();
-      console.log("✅ MongoDB connected successfully!");
+      
     } catch (error) {
-      console.error("❌ MongoDB connection failed:", error);
     }
   }
   checkDB();
-// Error Handling Middleware (MUST be last)
+// Error Handling Middleware 
 app.use(errorHandler);
 
 app.listen(process.env.PORT || 5500, () => {

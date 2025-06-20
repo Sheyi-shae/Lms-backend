@@ -1,10 +1,13 @@
 import db from "../libs/db.js";
+import notifyInstructorOfEnrollment from "../libs/email.instructorenroll.js";
 
 export async function enrollInCourse(req, res, next) {
-    const { courseId } = req.params; // ✅ Course ID from URL
-    const studentId = req.user.id; // ✅ Logged-in user(student) 
-    const {instructorName, instructorId}=req.body
-    console.log("Instructor name:", instructorName);
+    const { courseId } = req.params; 
+    const studentId = req.user.id; 
+    const studentEmail = req.user.email; 
+    const studentName = req.user.name;
+    const {instructorName, instructorId,instructorEmail}=req.body
+   
   
     try {
       // Check if course exists
@@ -43,6 +46,9 @@ export async function enrollInCourse(req, res, next) {
           instructorId,
         },
       });
+      //send notification to the instructor and student
+      await studentEnrollment(studentEmail, course.title);
+      await notifyInstructorOfEnrollment(instructorEmail, course.title, studentName);
   
       return res.status(201).json({
         success: true,
