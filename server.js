@@ -20,8 +20,7 @@ const prisma = new PrismaClient();
 const app = express();
 // Middleware
 
-
-const allowedOrigins = ['http://localhost:3000'];
+const allowedOrigins = ['http://localhost:3000','https://lms-frontend-six-tau.vercel.app'];
 
 app.use(
   cors({
@@ -67,5 +66,5 @@ app.use(errorHandler);
 
 app.listen(process.env.PORT || 5500, () => {
  
-    console.log(`Server is listening on port ${process.env.PORT}`);
+    //console.log(`Server is listening on port ${process.env.PORT}`);
 });
