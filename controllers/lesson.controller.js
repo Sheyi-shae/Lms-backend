@@ -81,16 +81,25 @@ export async function getCourseLessonsById(req, res, next) {
     // Extract completed lessons or fallback to empty array
     const completedLessons = enrollment?.completedLessons || [];
 
-    // Lock/Unlock Logic
-    const unlockedLessons = lessons.map((lesson) => {
-      const isCompleted = completedLessons.includes(lesson.id);
-      const isUnlocked = isCompleted || lesson.position === 1;
+     // Find the highest position of completed lessons
+   
+   const unlockedLessons = lessons.map((lesson) => {
+  const isFirstLesson = lesson.position === 1;
+  const completedLessonPositions = lessons
+    .filter((l) => completedLessons.includes(l.id))
+    .map((l) => l.position);
 
-      return {
-        ...lesson,
-        isLocked: !isUnlocked,
-      };
-    });
+  const maxCompletedPosition = Math.max(0, ...completedLessonPositions);
+
+  const isUnlocked = isFirstLesson || lesson.position <= maxCompletedPosition + 1;
+
+  return {
+    ...lesson,
+    isLocked: !isUnlocked,
+    isCompleted: completedLessons.includes(lesson.id)
+  };
+});
+
 
     return res.status(200).json({
       success: true,
