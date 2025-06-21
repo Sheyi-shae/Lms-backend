@@ -3,12 +3,10 @@ import db from "../libs/db.js";
 
 export async function createLesson(req, res, next) {
   const { title, content, videoUrl } = req.body;
-  const { courseId } = req.params; // Get the courseId from URL params
+  const { courseId } = req.params;
   const instructorId = req.user.id;
 
   try {
-
-    // Check if the  course exists
     const course = await db.course.findUnique({
       where: { id: courseId },
     });
@@ -18,20 +16,21 @@ export async function createLesson(req, res, next) {
       error.status = 404;
       throw error;
     }
-    // Check if the instructor is actually the owner of this course
+
     if (course.instructorId !== instructorId) {
       const error = new Error("You are not authorized to add lessons to this course");
       error.status = 403;
       throw error;
     }
-    //count the number of lessons in the course
-    const lessonCount = await db.lesson.count({
-      where: { courseId },
-    });
-    // Create a new lesson position based on the current count
-    const position = lessonCount + 1;
 
-    // Create the lesson
+    // Get the highest position for this course
+    const lastLesson = await db.lesson.findFirst({
+      where: { courseId },
+      orderBy: { position: "desc" },
+    });
+
+    const position = lastLesson ? lastLesson.position + 1 : 1;
+
     const newLesson = await db.lesson.create({
       data: {
         title,

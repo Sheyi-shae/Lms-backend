@@ -72,10 +72,12 @@ model Lesson {
   videoUrl  String?
   courseId  String   @db.ObjectId
   course    Course?  @relation(fields: [courseId], references: [id], onDelete: Cascade) // Delete lesson if course is deleted
-  position  Int      @unique
+  position  Int    
   duration  Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([courseId, position]) // ✅ Position is unique within a course
 }
 
 // Enrollment Model
