@@ -43,7 +43,7 @@ try {
     const certificateId = uuidv4(); 
 
     
-    const certificateUrl = `https://example.com/certificates/${certificateId}`;
+    const certificateUrl = `https://lms-frontend-six-tau.vercel.app/certificates/${certificateId}`;
 
     const certification = await db.certification.create({
       data: {
