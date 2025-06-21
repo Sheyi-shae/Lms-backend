@@ -18,8 +18,7 @@ courseRouter.put('/update/:courseId', authenticateUser,verifiedUser, authorizeRo
     verifiedUser, updateCourse); //  update course
 courseRouter.get('/mycourseenrollments/:courseId', authenticateUser, authorizeRole('instructor', 'admin'),
     verifiedUser, myCourseEnrollments); //  fetch my course enrollments
-courseRouter.delete('/:courseId', authenticateUser,verifiedUser, authorizeRole('instructor', 'admin'),
-    verifiedUser, deleteCourse);
+courseRouter.delete('/:courseId', authenticateUser,verifiedUser, authorizeRole('instructor'), deleteCourse);
 courseRouter.get('/mycourse/:instructorId', authenticateUser,verifiedUser, authorizeRole('instructor', 'admin'),
     verifiedUser, getCourseByUserId);
 

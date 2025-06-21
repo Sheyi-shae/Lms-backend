@@ -51,7 +51,7 @@ export async function getUserByID(req, res, next) {
 
 export async function updateUserByID(req, res, next) {
     const { id} = req.params;
-    const { name,phone, avatar } = req.body;
+    const { name,phone, avatar,instructorTitle } = req.body;
     const userId = req.user.id; //gotten from the jwt token
   
     try {
@@ -74,7 +74,7 @@ export async function updateUserByID(req, res, next) {
       const updatedUser = await db.user.update({
         where: { id },
         data: {
-            name,phone ,avatar
+            name,phone ,avatar,instructorTitle
   
         },
       });

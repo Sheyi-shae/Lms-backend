@@ -86,6 +86,9 @@ export async function getAllCourse(req, res, next) {
         enrollments: true,
         category: true,
       },
+      orderBy: {
+        createdAt: 'desc', 
+      },
     });
 
     if (!course) {
@@ -126,7 +129,6 @@ export async function deleteCourse(req, res, next) {
       throw error;
     }
 
-    // Delete the course (Lessons will be deleted automatically)
     await db.course.delete({
       where: { id: courseId },
     });
@@ -189,6 +191,9 @@ export async function myCourseEnrollments(req, res, next) {
   try {
     const course = await db.course.findUnique({
       where: { id: courseId },
+      orderBy: {
+        createdAt: 'desc', 
+      },
     });
 
     if (!course) {

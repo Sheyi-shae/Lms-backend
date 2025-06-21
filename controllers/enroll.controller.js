@@ -1,5 +1,6 @@
 import db from "../libs/db.js";
 import notifyInstructorOfEnrollment from "../libs/email.instructorenroll.js";
+import studentEnrollment from "../libs/email.studentenroll.js";
 
 export async function enrollInCourse(req, res, next) {
     const { courseId } = req.params; 
