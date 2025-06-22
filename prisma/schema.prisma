@@ -34,8 +34,8 @@ model User {
   teaching          Course[]         @relation("InstructorCourses") // Courses the instructor is teaching
   certifications    Certification[]  // Certifications issued to the user
 
-   interests         String[]         @db.ObjectId   //  Array of category IDs (interests)
-  selectedInterest  Boolean          @default(false) //  Flag for interest selection
+   interests         String[]       
+  selectedInterest  Boolean     @default(false) 
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
 }

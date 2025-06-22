@@ -28,7 +28,7 @@ export default async function authController(req,res,next) {
 
         const newUser = await db.user.create({
             data: {
-                name,email,password:hashedPassword,phone,verificationToken
+                name,email,password:hashedPassword,phone,verificationToken,interests: []
             }
         });
         await sendVerificationEmail(email, verificationToken);
