@@ -191,8 +191,8 @@ export async function updateUserByID(req, res, next) {
 
   //update user interests here
 export async function updateUserInterests(req, res, next) {
-    const { interests } = req.body; // interests should be an array of category IDs
-    const userId = req.user.id; //gotten from the jwt token
+    const { interests } = req.body; 
+    const userId = req.user.id; 
 
     try {
         const user = await db.user.findUnique({
@@ -210,24 +210,26 @@ export async function updateUserInterests(req, res, next) {
             error.status = 403;
             throw error;
         }
-        if (!Array.isArray(interests) || interests.length === 0 || interests.length > 5) {
-  
-          const error = new Error("You must select between 1 and 5 interests");
-            error.status = 400;
-            throw error;
-          }
- 
+        const rawInterests = req.body.interests;
 
+if (!Array.isArray(rawInterests) || rawInterests.length === 0 || rawInterests.length > 5) {
+  const error = new Error("You must select between 1 and 5 interests");
+  error.status = 400;
+  throw error;
+}
 
-        const updatedUser = await db.user.update({
-            where: { id:userId },
-            data: {
-               selectedInterest: true,
-                interests,
-            },
-        });
+// Convert ObjectIds  to strings
+const interests = rawInterests.map(id => String(id));
 
-        return res.status(200).json({
+const updatedUser = await db.user.update({
+  where: { id: userId },
+  data: {
+    selectedInterest: true,
+    interests,
+  },
+});
+
+ return res.status(200).json({
             success: true,
             message: "User interests updated successfully",
             data:updatedUser

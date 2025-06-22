@@ -1,6 +1,7 @@
 import db from "../libs/db.js";
 import courseCreationEmail from "../libs/email.coure_creation.js";
 
+
 export default async function courseController(req, res, next) {
   const { title, description, imageUrl,categoryId} = req.body;
 
