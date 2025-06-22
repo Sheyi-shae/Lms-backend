@@ -187,3 +187,52 @@ export async function updateUserByID(req, res, next) {
       next(error);
     }
   }
+
+
+  //update user interests here
+export async function updateUserInterests(req, res, next) {
+    const { interests } = req.body; // interests should be an array of category IDs
+    const userId = req.user.id; //gotten from the jwt token
+
+    try {
+        const user = await db.user.findUnique({
+            where: { id: userId },
+        });
+
+        if (!user) {
+            const error = new Error("User not found");
+            error.status = 404;
+            throw error;
+        }
+
+        if (user.id !== userId) {
+            const error = new Error("You are not authorized to update this profile");
+            error.status = 403;
+            throw error;
+        }
+        if (!Array.isArray(interests) || interests.length === 0 || interests.length > 5) {
+  
+          const error = new Error("You must select between 1 and 5 interests");
+            error.status = 400;
+            throw error;
+          }
+ 
+
+
+        const updatedUser = await db.user.update({
+            where: { id:userId },
+            data: {
+               selectedInterest: true,
+                interests,
+            },
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "User interests updated successfully",
+            data:updatedUser
+        });
+    } catch (error) {
+        next(error);
+    }
+  }

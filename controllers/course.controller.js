@@ -260,6 +260,50 @@ export async function getCourseByUserId(req, res, next) {
   }
 }
 
+//fetch random courses based on user interests(categoryId)
+export async function getRecommendedCourses(req, res, next) {
+  const userId = req.user.id;
+
+  try {
+    // 1. Get the user's selected interest categories
+    const user = await db.user.findUnique({
+      where: { id: userId },
+      select: { interests: true },
+    });
+
+    if (!user || !user.interests || user.interests.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No interests selected yet.",
+        data: [],
+      });
+    }
+
+    // 2. Fetch random full course documents matching user interests
+    const recommendedCourses = await db.course.aggregateRaw({
+      pipeline: [
+        {
+          $match: {
+            categoryId: { $in: user.interests },
+          },
+        },
+        {
+          $sample: { size: 8 }, // fetch 8 random full course docs
+        }
+      ],
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Recommended courses based on your interests",
+      data: recommendedCourses,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+
 
 
 

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import courseController, { deleteCourse, getAllCourse, getCourseByUserId, getCourseByID, myCourseEnrollments, updateCourse } from '../controllers/course.controller.js';
+import courseController, { deleteCourse, getAllCourse, getCourseByUserId, getCourseByID, myCourseEnrollments, updateCourse, getRecommendedCourses } from '../controllers/course.controller.js';
 import { authenticateUser, authorizeRole, verifiedUser } from '../middlewares/auth.middleware.js';
 import { completeLesson, createLesson, deleteLessonById, getCourseLessonsById, getLessonById, updateLesson } from '../controllers/lesson.controller.js';
 
@@ -21,6 +21,9 @@ courseRouter.get('/mycourseenrollments/:courseId', authenticateUser, authorizeRo
 courseRouter.delete('/:courseId', authenticateUser,verifiedUser, authorizeRole('instructor'), deleteCourse);
 courseRouter.get('/mycourse/:instructorId', authenticateUser,verifiedUser, authorizeRole('instructor', 'admin'),
     verifiedUser, getCourseByUserId);
+   
+courseRouter.get('/interests', authenticateUser,
+     verifiedUser,getRecommendedCourses); //  fetch courses based on user interests
 
     //for public users
     courseRouter.get('/all-courses/public', getAllCourse); //  fetch all courses for public users
