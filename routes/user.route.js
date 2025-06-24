@@ -11,7 +11,9 @@ userRouter.put('/:id',authenticateUser,updateUserByID)
 userRouter.put('/verify-user/:id',authenticateUser,verifyUser)
 userRouter.put('/resend/:id',authenticateUser,resendVerificationEmail)
 //update user interests
-userRouter.put('/interests', authenticateUser, verifiedUser, updateUserInterests);
+userRouter.put('/interests/:id', authenticateUser, verifiedUser, updateUserInterests);
+
+//userRouter.put('/interest/:id', authenticateUser, verifiedUser,updateUserInterest );
 
 
 export default userRouter;

@@ -266,12 +266,13 @@ export async function getRecommendedCourses(req, res, next) {
   const userId = req.user.id;
 
   try {
-    // 1. Get the user's selected interest categories
+    
     const user = await db.user.findUnique({
       where: { id: userId },
       select: { interests: true },
     });
 
+    
     if (!user || !user.interests || user.interests.length === 0) {
       return res.status(200).json({
         success: true,
@@ -280,24 +281,38 @@ export async function getRecommendedCourses(req, res, next) {
       });
     }
 
-    // 2. Fetch random full course documents matching user interests
-    const recommendedCourses = await db.course.aggregateRaw({
-      pipeline: [
-        {
-          $match: {
-            categoryId: { $in: user.interests },
-          },
-        },
-        {
-          $sample: { size: 8 }, // fetch 8 random full course docs
-        }
-      ],
-    });
+   
+const courses = await db.course.findMany({
+  where: {
+    categoryId: {
+      in: user.interests,
+      
+    },
+    
+  },
+  take: 8, // limited random sample
+  orderBy: {
+    createdAt: 'desc' 
+  },
+  include: {
+        instructor: true,
+        lessons: true,
+        enrollments: true,
+        category: true,
+      },
+});
+
+//shuffle fetched courses
+function shuffleArray(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+    const shuffledCourses = shuffleArray(courses);
 
     return res.status(200).json({
       success: true,
       message: "Recommended courses based on your interests",
-      data: recommendedCourses,
+      data: shuffledCourses,
     });
   } catch (error) {
     next(error);

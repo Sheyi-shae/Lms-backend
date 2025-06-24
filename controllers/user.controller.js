@@ -191,13 +191,15 @@ export async function updateUserByID(req, res, next) {
 
   //update user interests here
 export async function updateUserInterests(req, res, next) {
-    const { interests } = req.body; 
-    const userId = req.user.id; 
+    const { selectedIds } = req.body; 
+    const {id}= req.params
+    console.log('selectedIds', selectedIds)
 
     try {
         const user = await db.user.findUnique({
-            where: { id: userId },
+            where: { id },
         });
+        
 
         if (!user) {
             const error = new Error("User not found");
@@ -205,36 +207,27 @@ export async function updateUserInterests(req, res, next) {
             throw error;
         }
 
-        if (user.id !== userId) {
+        if (user.id !== id) {
             const error = new Error("You are not authorized to update this profile");
             error.status = 403;
             throw error;
         }
-        const rawInterests = req.body.interests;
-
-if (!Array.isArray(rawInterests) || rawInterests.length === 0 || rawInterests.length > 5) {
-  const error = new Error("You must select between 1 and 5 interests");
-  error.status = 400;
-  throw error;
-}
-
-// Convert ObjectIds  to strings
-const interests = rawInterests.map(id => String(id));
 
 const updatedUser = await db.user.update({
-  where: { id: userId },
+  where: { id },
   data: {
     selectedInterest: true,
-    interests,
+    interests:selectedIds,
   },
 });
 
  return res.status(200).json({
             success: true,
             message: "User interests updated successfully",
-            data:updatedUser
+           data:updatedUser
         });
     } catch (error) {
         next(error);
     }
   }
+

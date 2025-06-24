@@ -22,7 +22,7 @@ courseRouter.delete('/:courseId', authenticateUser,verifiedUser, authorizeRole('
 courseRouter.get('/mycourse/:instructorId', authenticateUser,verifiedUser, authorizeRole('instructor', 'admin'),
     verifiedUser, getCourseByUserId);
    
-courseRouter.get('/interests', authenticateUser,
+courseRouter.get('/interests/courses', authenticateUser,
      verifiedUser,getRecommendedCourses); //  fetch courses based on user interests
 
     //for public users
